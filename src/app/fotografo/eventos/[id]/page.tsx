@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 import { updateEvent } from '../actions'
 import { EventFormFields } from '../event-form-fields'
 import { EventTabs } from './event-tabs'
+import { MediaTab } from './fotos/media-tab'
 import { WristbandsTab } from './pulseiras/wristbands-tab'
 
 export default async function EventPage({
@@ -42,6 +43,7 @@ export default async function EventPage({
       {warning ? <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">{warning}</p> : null}
       <EventTabs eventId={id} active={aba} />
       {aba === 'pulseiras' ? <WristbandsTab event={event} /> : null}
+      {aba === 'fotos' ? <MediaTab event={event} /> : null}
       {aba === 'config' ? (
         <Card>
           <ActionForm action={updateEvent.bind(null, id)} submitLabel="Salvar">
