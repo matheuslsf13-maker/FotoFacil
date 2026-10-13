@@ -26,3 +26,11 @@ export function statusLabel(row: { status: RegistrationStatus; payment_method: P
   if (row.status === 'wristband') return 'Pulseira entregue'
   return row.payment_method === 'pix' ? 'Pago (PIX)' : 'Pago (manual)'
 }
+
+export function canAdminUndo(row: {
+  status: RegistrationStatus
+  payment_method: PaymentMethod | null
+  settlement_status: 'open' | 'paid' | null
+}): boolean {
+  return row.status === 'paid' && row.payment_method === 'manual' && row.settlement_status !== 'paid'
+}
