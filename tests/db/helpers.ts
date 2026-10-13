@@ -100,3 +100,20 @@ export async function insertRegistration(eventId: string, clientId: string, pric
   )
   return rows[0].id
 }
+
+export async function deliver(userId: string, eventId: string, clientId: string): Promise<string> {
+  return asUser(userId, async c => (await c.query('select public.deliver_wristband($1, $2, true) as id', [eventId, clientId])).rows[0].id)
+}
+
+export async function confirmManual(userId: string, registrationId: string): Promise<void> {
+  await asUser(userId, c => c.query('select public.confirm_manual_payment($1)', [registrationId]))
+}
+
+export async function createMedia(eventId: string): Promise<string> {
+  const { rows } = await pool.query(
+    `insert into public.media (event_id, type, original_name, storage_path, thumb_path, taken_on, status)
+     values ($1, 'photo', 'a.jpg', 'x/full.jpg', 'x/thumb.jpg', current_date, 'ready') returning id`,
+    [eventId],
+  )
+  return rows[0].id
+}
